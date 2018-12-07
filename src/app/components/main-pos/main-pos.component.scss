@@ -1,0 +1,75 @@
+.padding-top-10 {
+  padding-top: 10px;
+}
+
+.display-block {
+  display: block;
+}
+
+#pos {
+  margin: 40px 20px 0 20px;
+}
+
+.item {
+  position: relative;
+
+  cursor: pointer;
+
+  height: 50px;
+
+  background: white;
+  border-radius: 3px;
+  box-shadow: 0 4px rgba(0, 0, 0, 0.2);
+
+  margin: 0 7px 11px 7px;
+
+  color: #888;
+  text-align: center;
+  font-weight: bold;
+  font-size: 12px;
+
+  transition: all 0.2s ease;
+}
+
+.items-holder {
+  @extend .padding-top-10;
+  background: lightgrey;
+  height: 805px;
+}
+
+.invoice-holder {
+  @extend .padding-top-10;
+  background: white;
+  height: 600px;
+  overflow-y: scroll;
+}
+
+.totals-holder {
+  background: white;
+  height: 155px;
+  padding: 10px;
+  margin-top: 10px;
+}
+
+.float-right {
+  float: right;
+}
+
+#pos_totals span {
+  @extend .display-block;
+  margin: 5px;
+}
+
+#pos_inv span {
+  margin: 5px;
+  display: inline-block;
+}
+
+#pos_prod span {
+  @extend .display-block;
+}
+
+#btn_totals {
+  margin-top: 10px;
+  float: right;
+}

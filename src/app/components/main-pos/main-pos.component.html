@@ -1,0 +1,54 @@
+<nav class="navbar navbar-light bg-light">
+    <span class="navbar-brand" (click)="openParadocsSite()">
+        <img src="assets/paradocs-logo.png" class="d-inline-block align-top" alt="">
+    </span>
+</nav>
+<div id="pos">
+    <div class="row">
+        <div class="col-md-2">
+            <span>{{categoriesTitle}}</span>
+            <div class="items-holder">
+                <div id="pos_cat" class="item" *ngFor="let category of categories"
+                     (click)="getProductsByCategory(category)">
+                    <span>{{category}}</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-7">
+            <span>{{productsTitle}}</span>
+            <div class="items-holder">
+                <div class="row">
+                    <div class="col-md-3" *ngFor="let product of products">
+                        <div id="pos_prod" class="item" (click)="addProduct(product)">
+                            <span>{{product.name}}</span>
+                            <span>${{product.price | toFixed}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <span>{{invoiceTitle}}</span>
+            <div class="invoice-holder">
+                <div id="pos_inv" *ngFor="let product of invoiceProducts">
+                    <span>1 -</span>
+                    <span>{{product.name}}</span>
+                    <span class="float-right">${{product.price | toFixed}}</span>
+                </div>
+            </div>
+            <div class="totals-holder">
+                <div id="pos_totals">
+                    <span>Subtotal: {{invoiceSubTotal | toFixed}}</span>
+                    <span>TPS: {{tps | toFixed}}</span>
+                    <span>TVQ: {{tvq | toFixed}}</span>
+                    <span>Total: {{invoiceTotal | toFixed}}</span>
+                </div>
+            </div>
+            <div id="btn_totals">
+                <button type="button" class="btn btn-primary btn-sm" (click)="clearInvoiceProducts()">
+                    Clear
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
