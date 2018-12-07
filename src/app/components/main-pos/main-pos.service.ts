@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
 import { ElectronService } from 'ngx-electron';
 import { Observable, of } from 'rxjs';
+import { map, mergeMap } from 'rxjs/operators';
+import { HttpClient } from '@angular/common/http';
+
 import { Product } from './product.model';
 import { FileServiceService } from '../../providers/file-service.service';
-
 import { ElectronService as MyElectronService } from '../../providers/electron.service';
 
 @Injectable({
@@ -14,6 +16,7 @@ export class MainPosService {
 
     constructor(private electronService: ElectronService,
         private myElectronService: MyElectronService,
+        private http: HttpClient,
         private fileService: FileServiceService) {
     }
 
@@ -23,14 +26,26 @@ export class MainPosService {
     public getCategories(): Observable<string[]> {
         if (this.myElectronService.isElectron()) {
             const appPath: string = this.myElectronService.getAppPath();
-
             if (!!appPath) {
                 const dataFilePath: string = appPath + '\\src\\assets\\categories.csv';
                 const csvContent: string = this.fileService.readFile(dataFilePath);
                 return of(MainPosService.parseCsvToCategories(csvContent));
             }
+        } else {
+            return this.getCategoriesCsv().pipe(
+                mergeMap((file) => {
+                    const reader: FileReader = new FileReader();
+                    reader.readAsText(file);
+
+                    return Observable.create(observer => {
+                        reader.onload = ev => {
+                            observer.next(MainPosService.parseCsvToCategories(reader.result));
+                        }
+                        reader.onerror = error => observer.error(error);
+                    });
+                })
+            )
         }
-        return of([]);
     }
 
     /**
@@ -53,13 +68,21 @@ export class MainPosService {
     public loadProducts(): void {
         if (this.myElectronService.isElectron()) {
             const appPath: string = this.myElectronService.getAppPath();
-
             if (!!appPath) {
                 const dataFilePath: string = appPath + '\\src\\assets\\products.csv';
                 const csvContent: string = this.fileService.readFile(dataFilePath);
                 this.products = MainPosService.parseCsvToProducts(csvContent);
                 this.notifyProductsLoaded();
             }
+        } else {
+            this.getProductsCsv().subscribe((file) => {
+                const reader: FileReader = new FileReader();
+
+                reader.onload = () => {
+                    this.products = MainPosService.parseCsvToProducts(reader.result);
+                };
+                reader.readAsText(file);
+            });
         }
     }
 
@@ -72,7 +95,7 @@ export class MainPosService {
         }
     }
 
-    private static parseCsvToProducts(csvContent: string): Product[] {
+    private static parseCsvToProducts(csvContent): Product[] {
         const products: Product[] = [];
 
         if (csvContent) {
@@ -99,7 +122,7 @@ export class MainPosService {
         return products;
     }
 
-    private static parseCsvToCategories(csvContent: string): string[] {
+    private static parseCsvToCategories(csvContent): string[] {
         const categories: string[] = [];
 
         if (csvContent) {
@@ -116,5 +139,15 @@ export class MainPosService {
             }
         }
         return categories;
+    }
+
+    private getProductsCsv(): Observable<any> {
+        return this.http.get('./assets/products.csv', { responseType: 'blob' }).pipe(
+            map(response => (<any>response)));
+    }
+
+    private getCategoriesCsv(): Observable<any> {
+        return this.http.get('./assets/categories.csv', { responseType: 'blob' }).pipe(
+            map(response => (<any>response)));
     }
 }

@@ -1,8 +1,8 @@
-import {Component, OnInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { ElectronService } from 'ngx-electron';
 
-import {MainPosService} from './main-pos.service';
-import {Product} from './product.model';
-import {ElectronService} from 'ngx-electron';
+import { MainPosService } from './main-pos.service';
+import { Product } from './product.model';
 
 @Component({
     selector: 'app-main-pos',
