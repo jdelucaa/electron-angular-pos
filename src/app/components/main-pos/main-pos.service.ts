@@ -1,10 +1,10 @@
-import {Injectable} from '@angular/core';
-import {ElectronService} from 'ngx-electron';
-import {Observable, of} from 'rxjs';
-import {Product} from './product.model';
-import {FileServiceService} from '../../providers/file-service.service';
+import { Injectable } from '@angular/core';
+import { ElectronService } from 'ngx-electron';
+import { Observable, of } from 'rxjs';
+import { Product } from './product.model';
+import { FileServiceService } from '../../providers/file-service.service';
 
-import {ElectronService as MyElectronService} from '../../providers/electron.service';
+import { ElectronService as MyElectronService } from '../../providers/electron.service';
 
 @Injectable({
     providedIn: 'root'
@@ -13,19 +13,22 @@ export class MainPosService {
     private products: Product[] = [];
 
     constructor(private electronService: ElectronService,
-                private myElectronService: MyElectronService,
-                private fileService: FileServiceService) {
+        private myElectronService: MyElectronService,
+        private fileService: FileServiceService) {
     }
 
     /**
      * Load categories
      */
     public getCategories(): Observable<string[]> {
-        const appPath: string = this.myElectronService.getAppPath();
-        const dataFilePath: string = appPath + '\\src\\assets\\categories.csv';
-        if (!!appPath) {
-            const csvContent: string = this.fileService.readFile(dataFilePath);
-            return of(MainPosService.parseCsvToCategories(csvContent));
+        if (this.myElectronService.isElectron()) {
+            const appPath: string = this.myElectronService.getAppPath();
+
+            if (!!appPath) {
+                const dataFilePath: string = appPath + '\\src\\assets\\categories.csv';
+                const csvContent: string = this.fileService.readFile(dataFilePath);
+                return of(MainPosService.parseCsvToCategories(csvContent));
+            }
         }
         return of([]);
     }
@@ -35,22 +38,28 @@ export class MainPosService {
      * @param category category to be used as a filter
      */
     public getProductsByCategory(category: string): Product[] {
-        const categ: string = category.trim().toLocaleLowerCase();
-        return this.products.filter(prod => {
-            return prod.category.trim().toLocaleLowerCase() === categ;
-        });
+        if (category) {
+            const categ: string = category.trim().toLocaleLowerCase();
+            return this.products.filter(prod => {
+                return prod.category.trim().toLocaleLowerCase() === categ;
+            });
+        }
+        return [];
     }
 
     /**
      * Opens a dialog to select products file and load products from file.
      */
     public loadProducts(): void {
-        const appPath: string = this.myElectronService.getAppPath();
-        const dataFilePath: string = appPath + '\\src\\assets\\products.csv';
-        if (!!appPath) {
-            const csvContent: string = this.fileService.readFile(dataFilePath);
-            this.products = MainPosService.parseCsvToProducts(csvContent);
-            this.notifyProductsLoaded();
+        if (this.myElectronService.isElectron()) {
+            const appPath: string = this.myElectronService.getAppPath();
+
+            if (!!appPath) {
+                const dataFilePath: string = appPath + '\\src\\assets\\products.csv';
+                const csvContent: string = this.fileService.readFile(dataFilePath);
+                this.products = MainPosService.parseCsvToProducts(csvContent);
+                this.notifyProductsLoaded();
+            }
         }
     }
 
