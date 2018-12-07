@@ -35,7 +35,10 @@ export class ElectronService {
         if (this.isElectron()) {
             const path = this.remote.app.getAppPath();
             const index: number = path.lastIndexOf('app.asar');
-            return path.slice(0, index);
+            if (index > -1) {
+                return path.slice(0, index); // gets app path without app.asar at the end :$
+            }
+            return path;
         }
     }
 }
