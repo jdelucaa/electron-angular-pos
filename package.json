@@ -1,11 +1,11 @@
 {
   "name": "angular-electron",
-  "version": "5.1.0",
+  "version": "1.0.0",
   "description": "Angular 7 with Electron (Typescript + SASS + Hot Reload)",
-  "homepage": "https://github.com/maximegris/angular-electron",
+  "homepage": "https://github.com/jdelucaa/electron-angular-pos",
   "author": {
-    "name": "Maxime GRIS",
-    "email": "maxime.gris@gmail.com"
+    "name": "Joana Deluca Kleis",
+    "email": "jdelucaa@gmail.com"
   },
   "keywords": [
     "angular",
