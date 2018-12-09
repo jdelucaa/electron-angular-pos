@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { ElectronService } from 'ngx-electron';
 import { Observable, of } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
@@ -14,8 +13,7 @@ import { ElectronService as MyElectronService } from '../../providers/electron.s
 export class MainPosService {
     private products: Product[] = [];
 
-    constructor(private electronService: ElectronService,
-        private myElectronService: MyElectronService,
+    constructor(private myElectronService: MyElectronService,
         private http: HttpClient,
         private fileService: FileServiceService) {
     }
@@ -63,7 +61,7 @@ export class MainPosService {
     }
 
     /**
-     * Opens a dialog to select products file and load products from file.
+     * Loads products from data file.
      */
     public loadProducts(): void {
         if (this.myElectronService.isElectron()) {
@@ -86,8 +84,18 @@ export class MainPosService {
         }
     }
 
+    /**
+     * Opens an external url
+     * @param url Url to be opened
+     */
+    public openExternalUrl(url: string) {
+        if (this.myElectronService.isElectron()) {
+            this.myElectronService.remote.shell.openExternal(url);
+        }
+    }
+
     private notifyProductsLoaded(): void {
-        if (this.electronService.isElectronApp) {
+        if (this.myElectronService.isElectron()) {
             const options = {
                 body: 'Products were loaded successfully!'
             };

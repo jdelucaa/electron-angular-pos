@@ -45,5 +45,6 @@ You can disable "Developer Tools" by commenting `win.webContents.openDevTools();
 |`npm run electron:linux`| Builds the application and creates an app consumable on linux system |
 |`npm run electron:windows`| On a Windows OS, builds the application and creates an app consumable in windows 32/64 bit systems |
 |`npm run electron:mac`|  On a MAC OS, builds the application and generates a `.app` file of the application that can be run on Mac |
+|`ng test`|  Runs unit tests |
 
 **The application is optimised. Only /dist folder and node dependencies are included in the executable.**
