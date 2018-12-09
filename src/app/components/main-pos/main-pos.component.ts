@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { ElectronService } from 'ngx-electron';
 
 import { MainPosService } from './main-pos.service';
 import { Product } from './product.model';
@@ -23,8 +22,7 @@ export class MainPosComponent implements OnInit {
     public tvq = 0.00;
     public invoiceTotal = 0.00;
 
-    constructor(private mainService: MainPosService,
-                private electronService: ElectronService) {
+    constructor(private mainService: MainPosService) {
     }
 
     ngOnInit() {
@@ -64,10 +62,7 @@ export class MainPosComponent implements OnInit {
         this.tvq = 0.00;
     }
 
-    public openParadocsSite(): void {
-        if (this.electronService.isElectronApp) {
-            this.electronService.shell.openExternal('http://paradocs.ca');
-        }
+    public goToParadocs(): void {
+        this.mainService.openExternalUrl('http://paradocs.ca');
     }
-
 }

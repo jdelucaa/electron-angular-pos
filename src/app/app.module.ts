@@ -16,7 +16,6 @@ import {ElectronService} from './providers/electron.service';
 import {AppComponent} from './app.component';
 import {MainPosModule} from './components/main-pos/main-pos.module';
 import {FileServiceService} from './providers/file-service.service';
-import {NgxElectronModule} from 'ngx-electron';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -30,7 +29,6 @@ export function HttpLoaderFactory(http: HttpClient) {
     imports: [
         BrowserModule,
         MainPosModule,
-        NgxElectronModule,
         FormsModule,
         HttpClientModule,
         AppRoutingModule,
